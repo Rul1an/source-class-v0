@@ -1,0 +1,25 @@
+# source_class v0
+
+> One axis for what an outcome claim in agent evidence rests on: a typed
+> source-class vocabulary, a mapping of several 2026 dialects onto it, ten
+> vectors, and a dependency-free checker. A vocabulary, not a standard.
+
+An agent evidence record that says `outcome: blocked` does not say how that was
+determined: a gateway refusal before dispatch, a runtime deny branch, and an
+external monitor all produce the same value. The `source_class` axis types the
+basis of the claim so a reader knows which one it holds. The unit that matters
+is the axis and its invariants; the checker is small enough to rewrite from its
+docstring.
+
+## Files
+- [README.md](README.md): the problem, the axis, why it is load-bearing, the non-claims.
+- [AGENTS.md](AGENTS.md): entry point for coding agents; how to run and edit.
+- [map/axis.json](map/axis.json): seven values, five invariants, canonicalization declaration.
+- [map/dialects.json](map/dialects.json): the mapping of external vocabularies onto the axis, with credit.
+- [vectors/cases.json](vectors/cases.json): records plus the verdict a conforming reader reproduces.
+- [check.py](check.py): the reader, standard library only, deterministic.
+- [schema/source-class-record.schema.json](schema/source-class-record.schema.json): JSON Schema (2020-12) for a native record.
+- [CONTRIBUTING.md](CONTRIBUTING.md): correcting or authoring a dialect row; correcting the axis.
+
+## Run
+`python3 check.py` prints per-case verdicts and the corpus digest. No install, no network.

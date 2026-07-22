@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Rul1an/source-class-v0/schema/source-class-record.schema.json",
+  "title": "source_class/v0 record",
+  "description": "A record on the source-class-v0 wire. This schema validates STRUCTURE, not verdict: a record with an unrecognized source_class is well-formed (a reader folds it to `unknown`), and a record with no source_class is well-formed (a reader reports `undeclared`). The one structural invariant a schema can carry is that a digest travels with the canonicalization id that produced it; a digest without its scheme id is rejected here, matching the `invalid` verdict a conforming reader returns for it.",
+  "type": "object",
+  "required": ["schema"],
+  "properties": {
+    "schema": {
+      "const": "source_class/v0",
+      "description": "Wire marker for this vocabulary."
+    },
+    "outcome": {
+      "type": "string",
+      "description": "What the record claims happened. Free string; the axis types the BASIS of the claim, not its value."
+    },
+    "source_class": {
+      "type": "string",
+      "description": "The basis the outcome claim rests on. Recognized values: producer_reported, issuer_attested, receiver_receipt, boundary_observed, third_party_observed, independently_observed, unknown. NOT enum-constrained on purpose: an unrecognized value is structurally valid and a reader folds it to `unknown` fail-closed, so a closed enum here would reject records the vocabulary treats as well-formed."
+    },
+    "observer": {
+      "type": "string",
+      "description": "Optional prose describing the vantage that produced the observation (e.g. a kernel tracepoint the observed process cannot write to)."
+    },
+    "coverage_boundary": {
+      "type": "string",
+      "description": "Optional declared boundary the claim is scoped to. An observed class covers the named boundary only."
+    },
+    "outcome_digest": {
+      "type": "object",
+      "description": "Optional content address of the outcome record. If present, the canonicalization id MUST travel with the digest (invariant 3): two readers with different implicit canonicalizations derive different bytes for the same record and cannot tell whose reading was meant.",
+      "required": ["digest", "canonicalization"],
+      "properties": {
+        "digest": {
+          "type": "string",
+          "description": "Hash of the referenced record, e.g. sha256:<hex>."
+        },
+        "canonicalization": {
+          "type": "string",
+          "description": "The scheme the digest was computed under, e.g. jcs/rfc8785 or cbor/rfc8949. Neither is the default; it is declared per record."
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

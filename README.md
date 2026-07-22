@@ -1,5 +1,7 @@
 # source_class v0
 
+[![check](https://github.com/Rul1an/source-class-v0/actions/workflows/check.yml/badge.svg)](https://github.com/Rul1an/source-class-v0/actions/workflows/check.yml)
+
 One axis for what an outcome claim in agent evidence rests on, a mapping of five 2026 vocabularies onto it, ten vectors, and a dependency-free checker.
 
 ```bash
@@ -66,6 +68,8 @@ Read against the component-typed taxonomy, the remediation (the harness monitori
 - [`map/dialects.json`](map/dialects.json), the mapping: five vocabularies, the fragment each types, what each cannot express, with credit.
 - [`vectors/cases.json`](vectors/cases.json), ten records with the verdict a conforming reader must reproduce. The dialect-shaped records are minimal fragments in the shape of each vocabulary, written for this corpus; they are not fixtures copied from those projects.
 - [`check.py`](check.py), the reader: standard library only, no network, deterministic. The mapping rules are five numbered lines in one docstring; the corpus digest is a SHA-256 over the canonical bytes of the three JSON files, and the canonicalizer self-tests against hand-checked JCS byte strings before any digest is trusted.
+- [`schema/source-class-record.schema.json`](schema/source-class-record.schema.json), a JSON Schema (2020-12) for a native record. It validates structure, not verdict, and carries one invariant declaratively: a digest without its canonicalization id is rejected, the same `invalid` a conforming reader returns. [`schema/validate_vectors.py`](schema/validate_vectors.py) ties the schema to the vectors in CI so the two cannot drift.
+- [`AGENTS.md`](AGENTS.md) and [`llms.txt`](llms.txt), entry points for coding agents.
 
 Anyone can re-derive the corpus digest, and a second implementation of the reader needs nothing from this repository beyond the three JSON files and the rules in the docstring.
 
