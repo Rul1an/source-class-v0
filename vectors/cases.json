@@ -1,0 +1,112 @@
+{
+  "schema": "source_class_vectors/v0",
+  "note": "Each case is a record fragment plus the verdict a conforming reader must reproduce. Verdicts: declared (a recognized source class is present), declared_unknown (the record types its basis as not established, or carries a value the reader does not recognize and folds down), undeclared (the record's vocabulary cannot carry a basis, or the field is absent), invalid (a structural rule is broken). The dialect-shaped records are minimal fragments written for this corpus in the shape of each vocabulary.",
+  "cases": [
+    {
+      "name": "declared-boundary-observed",
+      "dialect": "source_class/v0",
+      "record": {
+        "schema": "source_class/v0",
+        "outcome": "blocked",
+        "source_class": "boundary_observed",
+        "coverage_boundary": "mcp-proxy: all tools/call via this gateway",
+        "outcome_digest": { "digest": "sha256:2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae", "canonicalization": "jcs/rfc8785" }
+      },
+      "expected": { "verdict": "declared", "basis": "boundary_observed", "notes": ["chokepoint vantage: the claim is scoped by the declared boundary and says nothing about paths that bypass it"] }
+    },
+    {
+      "name": "declared-unknown-is-a-statement",
+      "dialect": "source_class/v0",
+      "record": {
+        "schema": "source_class/v0",
+        "outcome": "executed",
+        "source_class": "unknown"
+      },
+      "expected": { "verdict": "declared_unknown", "basis": "unknown", "notes": ["the record told the reader its basis is not established; compare undeclared-bare-outcome, which told the reader nothing"] }
+    },
+    {
+      "name": "unrecognized-class-folds-to-unknown",
+      "dialect": "source_class/v0",
+      "record": {
+        "schema": "source_class/v0",
+        "outcome": "executed",
+        "source_class": "blockchain_verified"
+      },
+      "expected": { "verdict": "declared_unknown", "basis": "unknown", "notes": ["fail-closed fold: an unrecognized source class is reported as typed unknown, never guessed at, never an error"] }
+    },
+    {
+      "name": "digest-without-scheme-id-is-invalid",
+      "dialect": "source_class/v0",
+      "record": {
+        "schema": "source_class/v0",
+        "outcome": "executed",
+        "source_class": "independently_observed",
+        "outcome_digest": { "digest": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08" }
+      },
+      "expected": { "verdict": "invalid", "basis": null, "notes": ["a digest must travel with the canonicalization id that produced it; two readers with different implicit canonicalizations derive different bytes for the same record and cannot tell whose reading was meant"] }
+    },
+    {
+      "name": "basis-field-not-established",
+      "dialect": "vaara-basis-fields",
+      "record": {
+        "verdict": "bound",
+        "enforcement_logic_basis": "not_established",
+        "time_basis": "anchored"
+      },
+      "expected": { "verdict": "declared_unknown", "basis": "unknown", "notes": ["an honest typed unknown, carried in the producer's own vocabulary; the anchored time_basis raises tamper-evidence in time, not vantage"] }
+    },
+    {
+      "name": "time-anchor-alone-does-not-raise-vantage",
+      "dialect": "guardrail-decision-v1-precedence",
+      "record": {
+        "allow": false,
+        "issued_at": "2026-07-21T00:00:00Z",
+        "precedence_claim": "ANCHORED_BEFORE_OUTCOME"
+      },
+      "expected": { "verdict": "undeclared", "basis": null, "notes": ["the anchor proves the timestamp predates the outcome; the outcome beside it remains a report by whoever wrote it, and this vocabulary has no field to say who that was"] }
+    },
+    {
+      "name": "fresh-source-does-not-raise-vantage",
+      "dialect": "proofpath-guardrail-provenance",
+      "record": {
+        "proof_level": "FRESH",
+        "knowledge_source_ref": "https://policy.example.invalid/v2",
+        "source_content_hash": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+      },
+      "expected": { "verdict": "undeclared", "basis": null, "notes": ["FRESH re-derives the source document's bytes; it does not say who observed what the decision did"] }
+    },
+    {
+      "name": "undeclared-bare-outcome",
+      "dialect": "crewai-governance-outcome",
+      "record": {
+        "decision_id": "d-201",
+        "outcome": "blocked",
+        "completed_at": "2026-07-21T00:00:00Z"
+      },
+      "expected": { "verdict": "undeclared", "basis": null, "notes": ["three different mechanisms produce this identical record: a gateway refusal, a runtime deny branch, an external monitor; nothing in the record separates them"] }
+    },
+    {
+      "name": "basis-in-untyped-extensions-is-still-undeclared",
+      "dialect": "crewai-governance-outcome",
+      "record": {
+        "decision_id": "d-202",
+        "outcome": "blocked",
+        "extensions": { "some_vendor": { "observation": "kernel", "note": "we watched it from below" } }
+      },
+      "expected": { "verdict": "undeclared", "basis": null, "notes": ["an untyped per-vendor dict is outside what a neutral reader can grade; a basis only counts when it is carried in a typed field the contract owns"] }
+    },
+    {
+      "name": "declared-independently-observed-with-scheme-id",
+      "dialect": "source_class/v0",
+      "record": {
+        "schema": "source_class/v0",
+        "outcome": "executed",
+        "source_class": "independently_observed",
+        "observer": "kernel tracepoint, host-owned, not writable by the observed process",
+        "coverage_boundary": "connect(2) and openat(2) for cgroup abc123",
+        "outcome_digest": { "digest": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", "canonicalization": "jcs/rfc8785" }
+      },
+      "expected": { "verdict": "declared", "basis": "independently_observed", "notes": ["the strongest class for effect claims and still bounded: it covers the declared boundary only, and proves nothing about authorized refusals, which leave no effect to observe"] }
+    }
+  ]
+}

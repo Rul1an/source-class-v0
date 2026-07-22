@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this vocabulary or corpus, please cite it as software."
+type: software
+title: "source_class v0: a typed axis for what an outcome claim in agent evidence rests on"
+authors:
+  - family-names: "Schuurkes"
+    given-names: "Roel"
+    alias: "Rul1an"
+repository-code: "https://github.com/Rul1an/source-class-v0"
+license: Apache-2.0
+abstract: >-
+  One axis (producer_reported, issuer_attested, receiver_receipt,
+  boundary_observed, third_party_observed, independently_observed, unknown)
+  for the basis of outcome claims in agent evidence records, a machine-readable
+  mapping of five 2026 vocabularies onto it, ten conformance vectors, and a
+  dependency-free checker. This is a software artifact and a v0 vocabulary,
+  not a standard, and no standards body has adopted it.
+keywords:
+  - agent-evidence
+  - provenance
+  - source-class
+  - conformance-vectors

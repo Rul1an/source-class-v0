@@ -1,0 +1,25 @@
+{
+  "schema": "source_class_axis/v0",
+  "title": "Source class: what an outcome claim in agent evidence rests on",
+  "canonicalization": {
+    "id": "jcs/rfc8785",
+    "value_profile": "no floats; integers within +/-2^53; strings and object keys confined to the Basic Multilingual Plane (this corpus is ASCII-only and number-free); for this profile the reference serialization (UTF-8, sorted keys, no whitespace) is byte-equal to RFC 8785 output",
+    "note": "every digest in this corpus travels with the canonicalization id that produced it; a digest without its scheme id is not comparable and the checker rejects it"
+  },
+  "values": {
+    "producer_reported": "The party that performed or decided the action also reports the outcome. Signing, hash-chaining, or time-anchoring such a record raises tamper-evidence, never vantage.",
+    "issuer_attested": "A party in the producer's trust domain signs or attests the record. The signature binds the bytes to a key, not the claim to an observation.",
+    "receiver_receipt": "The counterparty that received the action issues the record, for example a called service returning a signed receipt. Independent of the producer, but a party to the exchange.",
+    "boundary_observed": "An interposed chokepoint on the action path (gateway, proxy) records what passed through it. It observes traffic through itself and nothing that bypasses it; the declared boundary is part of the claim.",
+    "third_party_observed": "A party outside both producer and receiver holds the observation in an artifact neither controls, for example a consulted public ledger or a log operated by a neutral party. Naming such an artifact is not consulting it.",
+    "independently_observed": "An observer at a vantage the observed process cannot write to (kernel or host telemetry below the harness) captured the effect.",
+    "unknown": "The basis is declared as not established. This is a typed value a record carries on purpose. It is distinct from a record that says nothing, and a checker treats the two differently."
+  },
+  "invariants": [
+    "declared unknown is distinct from undeclared: a record that says 'basis: unknown' has told the reader something a silent record has not",
+    "tamper-evidence never raises vantage: signatures, hash chains, and external time anchors bound when and whether bytes changed, not who could have been wrong about the fact",
+    "recomputability never raises vantage: re-deriving a digest confirms the bytes are intact under the declared canonicalization, not that the recorded event occurred",
+    "no value dominates: a signed refusal proves a non-action that an egress filter structurally cannot produce, and an external observation proves an effect a refusal cannot; the axis types facts, it does not rank them",
+    "unrecognized values fold to unknown, fail-closed: a reader that meets a source class it does not know reports a typed unknown rather than guessing or erroring"
+  ]
+}

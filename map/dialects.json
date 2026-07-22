@@ -1,0 +1,65 @@
+{
+  "schema": "source_class_dialect_map/v0",
+  "note": "Each entry maps one published 2026 vocabulary onto the source-class axis: which fragment of the axis it types, and what it cannot express. A mapping is a statement about expressiveness, not a grade of the project. Every project below is credited as having independently identified a real fragment of the axis.",
+  "dialects": [
+    {
+      "id": "survey-agent-traces-to-trust",
+      "source": "arXiv:2606.04990, From Agent Traces to Trust: A Survey of Evidence Tracing and Execution Provenance in LLM Agents (rev. 2026-06-28)",
+      "vocabulary": {
+        "trace_sources": ["reasoning", "retrieval", "tool use", "MCP server/host boundaries", "memory", "environment", "multi-agent communication"]
+      },
+      "fragment_typed": "component of origin",
+      "expressible_basis": [],
+      "cannot_express": "whether the observer sits inside or outside the harness being described; all seven source categories are producible by the harness itself. Completeness appears as a cost trade-off (storage, privacy, annotation burden), not as a declared denominator against which an absence becomes meaningful."
+    },
+    {
+      "id": "vaara-basis-fields",
+      "source": "vaaraio/vaara, tests/vectors/ (43 families) and docs/design/enforcement-attestation-spec.md, read 2026-07-22",
+      "vocabulary": {
+        "basis_fields": ["vcek_chain_basis", "ak_chain_basis", "root_trust_basis", "measurement_basis", "pcr_pin_basis", "producer_identity_basis", "time_basis", "freshness_basis", "enforcement_logic_basis", "ima_policy_basis", "decision_logic_basis", "decision_semantics_basis"],
+        "time_basis_values": ["self_asserted", "anchored"],
+        "enforcement_logic_basis_values": ["not_established"]
+      },
+      "fragment_typed": "crypto-root and time provenance",
+      "expressible_basis": ["unknown"],
+      "cannot_express": "the vantage of an outcome observation. The slot where it would live exists: enforcement_logic_basis is present in the vocabulary and carries exactly one value, not_established. The corpus is notably explicit about its own non-claims, which is the discipline this axis generalizes.",
+      "credit": "a notably developed basis vocabulary; twelve fields that keep a weak root visible in the output rather than hidden in prose"
+    },
+    {
+      "id": "guardrail-decision-v1-precedence",
+      "source": "Yarmoluk/ckg-nvidia-ai, docs/guardrail-decision-v1.md, read 2026-07-22",
+      "vocabulary": {
+        "precedence_claim": ["ANCHORED_BEFORE_OUTCOME", "ANCHORED_AFTER_OUTCOME", "TEMPORAL_PRECEDENCE_UNPROVEN"]
+      },
+      "fragment_typed": "temporal precedence of a timestamp relative to the outcome it stamps",
+      "expressible_basis": [],
+      "cannot_express": "who observed the outcome. A record anchored before the outcome settles proves the timestamp was not chosen after the fact; the outcome field beside it remains a report by whoever wrote it. The spec's own framing is careful here: the anchor bounds what was knowable when, not what happened.",
+      "credit": "names the before/after-outcome distinction explicitly, which most time-anchor discussions blur"
+    },
+    {
+      "id": "proofpath-guardrail-provenance",
+      "source": "safal207/ProofPath, PR #168, conformance/guardrail-decision-v1/manifest.json, read 2026-07-22",
+      "vocabulary": {
+        "proof_level": ["COMMITTED", "REPRODUCIBLE", "FRESH", "INVALID"],
+        "signals": ["SOURCE_STALE", "TEMPORAL_PRECEDENCE_UNPROVEN", "EXTERNAL_ANCHOR_UNVERIFIED"],
+        "retrieval_profile": "carries the representation identifier beside the source hash"
+      },
+      "fragment_typed": "recomputability and freshness of a source document behind a decision",
+      "expressible_basis": [],
+      "cannot_express": "the vantage of the decision's outcome. FRESH says the knowledge source still hashes to the declared bytes; it says nothing about who observed what the decision then did. The corpus enforces representation discipline on the source side (an ambiguous 'whatever curl returned' fails closed), which is the same property this axis asks of outcome claims.",
+      "credit": "provider-neutral by construction, stdlib checker, and explicit that a declared anchor is not a verified anchor"
+    },
+    {
+      "id": "crewai-governance-outcome",
+      "source": "crewAIInc/crewAI, PR #6030, GovernanceOutcome TypedDict, read 2026-07-22",
+      "vocabulary": {
+        "outcome": ["executed", "blocked", "error", "timeout"],
+        "extensions": "untyped per-vendor dict, passed through without validation"
+      },
+      "fragment_typed": "absence semantics, in prose: a test docstring distinguishes 'denied and recorded' from 'never observed'",
+      "expressible_basis": [],
+      "cannot_express": "how the outcome value was determined. The wire field is bare; a gateway that refused before dispatch, a runtime whose deny branch returns before its sandbox is invoked, and an external monitor all produce the same 'blocked'. Basis material in the untyped extensions dict is outside what a neutral checker can grade.",
+      "credit": "the docstring distinction is the absence half of the axis, stated plainly"
+    }
+  ]
+}
